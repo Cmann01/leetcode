@@ -4,33 +4,24 @@ class Solution(object):
         :type words: List[str]
         :rtype: List[str]
         """
-        # Initialize a list to store the minimum frequency of characters
-        min_freq = [float('inf')] * 26  # There are 26 lowercase English letters
+        if not words:
+            return []
 
-        # Iterate through each word
-        for word in words:
-            # Initialize a frequency list for the current word
-            freq = [0] * 26
+        # Initialize the frequency dictionary with the first word
+        freq = {char: words[0].count(char) for char in words[0]}
 
-            # Count the frequency of characters in the current word
-            for char in word:
-                freq[ord(char) - ord('a')] += 1
+        # Update the frequency dictionary based on each subsequent word
+        for word in words[1:]:
+            current_freq = {char: word.count(char) for char in word}
+            for char in freq:
+                if char in current_freq:
+                    freq[char] = min(freq[char], current_freq[char])
+                else:
+                    freq[char] = 0
 
-            # Update the minimum frequency list
-            for i in range(26):
-                min_freq[i] = min(min_freq[i], freq[i])
-
-        # Initialize the result list to store common characters
+        # Build the result list based on the frequency dictionary
         result = []
-
-        # Generate the common characters based on the minimum frequency
-        for i in range(26):
-            if min_freq[i] > 0:
-                result.extend([chr(i + ord('a'))] * min_freq[i])
+        for char, count in freq.items():
+            result.extend([char] * count)
 
         return result
-
-# Test cases
-solution = Solution()
-print(solution.commonChars(["bella", "label", "roller"]))  # Output: ["e", "l", "l"]
-print(solution.commonChars(["cool", "lock", "cook"]))      # Output: ["c", "o"]
