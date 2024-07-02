@@ -1,20 +1,18 @@
-class Solution(object):
-    def intersect(self, nums1, nums2):
-        """
-        :type nums1: List[int]
-        :type nums2: List[int]
-        :rtype: List[int]
-        """
-       
-        num_counts = {}
-       
-        for num in nums1:
-            num_counts[num] = num_counts.get(num, 0) + 1
+from collections import Counter
+from typing import List
+
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        # Count the frequencies of each element in both arrays
+        counts1 = Counter(nums1)
+        counts2 = Counter(nums2)
         
-        intersection = []
+        # Find the intersection of both counts
+        intersection = counts1 & counts2
         
-        for num in nums2:
-            if num in num_counts and num_counts[num] > 0:
-                intersection.append(num)
-                num_counts[num] -= 1
-        return intersection
+        # Construct the result array based on the intersection counts
+        result = []
+        for num in intersection:
+            result.extend([num] * intersection[num])
+        
+        return result
