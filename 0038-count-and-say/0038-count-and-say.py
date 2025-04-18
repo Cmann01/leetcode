@@ -1,26 +1,18 @@
-class Solution(object):
-    def countAndSay(self, n):
-        """
-        :type n: int
-        :rtype: str
-        """
+class Solution:
+    def countAndSay(self, n: int) -> str:
         if n == 1:
             return "1"
         
-        result = "1"
-        for _ in range(n - 1):
-            result = self.getNextSequence(result)
-        
-        return result
-    
-    def getNextSequence(self, s):
+        prev = self.countAndSay(n - 1)
         result = ""
-        i = 0
-        while i < len(s):
-            count = 1
-            while i + 1 < len(s) and s[i] == s[i + 1]:
+        count = 1
+        
+        for i in range(1, len(prev)):
+            if prev[i] == prev[i - 1]:
                 count += 1
-                i += 1
-            result += str(count) + s[i]
-            i += 1
+            else:
+                result += str(count) + prev[i - 1]
+                count = 1
+        result += str(count) + prev[-1]  # Append the last group
+        
         return result
